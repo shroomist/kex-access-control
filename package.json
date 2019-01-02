@@ -1,0 +1,32 @@
+{
+  "name": "kex-access-control",
+  "version": "0.1.0",
+  "description": "access control example",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node ./index.js",
+    "test": "jest",
+    "lint": "./node_modules/eslint/bin/eslint.js index.js",
+    "lintfix": "npm run lint -- --fix"
+  },
+  "eslintConfig": {
+    "extends": "airbnb",
+    "rules": {
+      "semi": 0
+    }
+  },
+  "author": "Andrej Novikov",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "eslint": "^5.11.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.12.1",
+    "jest": "^23.6.0",
+    "supertest": "^3.3.0"
+  },
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
