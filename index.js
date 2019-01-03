@@ -1,5 +1,10 @@
-const app = require('./src/app')
+const App = require('./src/app')
+const getSequelize = require('./src/db')
+const getExpress = require('./src/expressSetup')
 
 const port = 3000
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+const app = new App(getExpress(), getSequelize(), port)
+
+app.setupRoutes() // non-waited promise
+app.listen()
