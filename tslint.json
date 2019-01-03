@@ -1,0 +1,18 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended", "tslint-config-airbnb"
+  ],
+  "exclude": ["*.json"],
+  "jsRules": {},
+  "rules": {
+    "semicolon": [true, "never"],
+    "import-name": false,
+    "ordered-imports": false,
+    "no-console": {
+      "severity": "warning"
+    },
+    "space-before-function-paren": [true, "always"]
+  },
+  "rulesDirectory": []
+}

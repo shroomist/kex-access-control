@@ -1,9 +1,9 @@
-const Sequelize = require('sequelize')
-const config = require('./dbconfig')
+import Sequelize from 'sequelize'
+import config from './dbconfig.json'
 
 const postgresAddr = `postgres://${config.user}:${config.password}\
 @${config.host}/${config.dbname}`
 
 const getSequelizeInstance = () => new Sequelize(postgresAddr)
 
-module.exports = getSequelizeInstance
+export { getSequelizeInstance }
