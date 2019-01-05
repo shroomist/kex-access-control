@@ -11,7 +11,11 @@
     "lint": "./node_modules/tslint/bin/tslint './src/**/*.ts'",
     "watch-node": "nodemon dist/server.js",
     "watch-ts": "npm run build -- -w",
-    "dev": "npm run watch-node & npm run watch-ts"
+    "dev": "npm run watch-node & npm run watch-ts",
+    "migrate:up": "./node_modules/.bin/db-migrate up --config ./src/db/config.json --migrations-dir ./src/db/migrations",
+    "migrate:down": "./node_modules/.bin/db-migrate down --config ./src/db/config.json --migrations-dir ./src/db/migrations",
+    "migrate:up:test": "npm run migrate:up -- -e test",
+    "migrate:down:test": "npm run migrate:down -- -e test"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -32,6 +36,8 @@
     "@types/jest": "^23.3.11",
     "@types/sequelize": "^4.27.33",
     "@types/supertest": "^2.0.7",
+    "db-migrate": "^0.11.4",
+    "db-migrate-pg": "^0.4.0",
     "eslint": "^5.11.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
@@ -39,6 +45,7 @@
     "eslint-plugin-react": "^7.12.1",
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
+    "sequelize-typescript": "^0.6.6",
     "supertest": "^3.3.0",
     "ts-jest": "^23.10.5",
     "tslint": "^5.12.0",

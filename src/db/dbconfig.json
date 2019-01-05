@@ -1,7 +1,0 @@
-{
-  "host": "localhost",
-  "user": "postgres",
-  "password": "mysecretpassword",
-  "port": "5432",
-  "dbname": "kex_test_task_andy"
-}

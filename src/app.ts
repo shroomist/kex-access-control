@@ -1,5 +1,5 @@
 import { Express } from 'express'
-import { Sequelize } from 'sequelize'
+import { Sequelize } from 'sequelize-typescript'
 import { Server } from 'net'
 
 export default class App {

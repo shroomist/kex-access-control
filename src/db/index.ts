@@ -1,9 +1,23 @@
-import Sequelize from 'sequelize'
-import config from './dbconfig.json'
+import { Sequelize } from 'sequelize-typescript'
+import User from './models/user'
 
-const postgresAddr = `postgres://${config.user}:${config.password}\
-@${config.host}/${config.dbname}`
+type DbConfig = {
+  host: string,
+  username: string,
+  password: string,
+  port: number,
+  database: string,
+  dialect: string
+}
 
-const getSequelizeInstance = () => new Sequelize(postgresAddr)
+export const getSequel = (config: DbConfig) => {
+  const sqlz = new Sequelize({
+    ...config,
+    operatorsAliases: Sequelize.Op as any,
 
-export { getSequelizeInstance }
+    // modelPaths: [path.join(__dirname, "../models")],
+  })
+
+  sqlz.addModels([User])
+  return sqlz
+}

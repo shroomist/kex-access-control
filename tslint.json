@@ -12,7 +12,10 @@
     "no-console": {
       "severity": "warning"
     },
-    "space-before-function-paren": [true, "always"]
+    "space-before-function-paren": [true, "always"],
+    "trailing-comma": false,
+    "object-literal-sort-keys": false,
+    "interface-over-type-literal": false
   },
   "rulesDirectory": []
 }
