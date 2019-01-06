@@ -36,8 +36,7 @@
     "@types/jest": "^23.3.11",
     "@types/sequelize": "^4.27.33",
     "@types/supertest": "^2.0.7",
-    "db-migrate": "^0.11.4",
-    "db-migrate-pg": "^0.4.0",
+    "@types/uuid": "^3.4.4",
     "eslint": "^5.11.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
@@ -45,12 +44,14 @@
     "eslint-plugin-react": "^7.12.1",
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
+    "sequelize-cli": "^5.4.0",
     "sequelize-typescript": "^0.6.6",
     "supertest": "^3.3.0",
     "ts-jest": "^23.10.5",
     "tslint": "^5.12.0",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.2",
+    "uuid": "^3.3.2"
   },
   "dependencies": {
     "express": "^4.16.4",
