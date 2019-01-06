@@ -1,7 +1,7 @@
 import App from './app'
 import { getExpress } from './express'
 import { getSequel } from './db'
-import config from './db/config.json'
+import config from '../sequelize_config.json'
 import request from 'supertest'
 import { Express } from 'express'
 
@@ -13,7 +13,7 @@ describe('App', async () => {
 
   beforeEach(async () => {
     express = getExpress()
-    app = new App(express, getSequel(config.dev))
+    app = new App(express, getSequel(config.development))
     await app.setup()
     app.listen(port)
   })

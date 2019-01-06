@@ -1,11 +1,10 @@
 import { Sequelize } from 'sequelize-typescript'
-import User from './models/user'
+import Users from './models/users'
 
 type DbConfig = {
   host: string,
   username: string,
   password: string,
-  port: number,
   database: string,
   dialect: string
 }
@@ -18,6 +17,6 @@ export const getSequel = (config: DbConfig) => {
     // modelPaths: [path.join(__dirname, "../models")],
   })
 
-  sqlz.addModels([User])
+  sqlz.addModels([Users])
   return sqlz
 }
