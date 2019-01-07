@@ -6,6 +6,9 @@ import Users from './db/models/users'
 import uuid = require('uuid/v4')
 import Resources from './db/models/resources'
 import { IKexRequest } from './express/express'
+import ResourcePermissions from './db/models/resourcePermissions'
+import UserPermissions from './db/models/userPermissions'
+import Permissions from './db/models/permissions'
 
 export default class App {
   private server: Server
@@ -61,6 +64,15 @@ export default class App {
         body: req.body.text
       })
       res.sendStatus(201)
+    })
+
+    this.express.get('/resources/:path', async (req: IKexRequest, res) => {
+      const readPermission = await Permissions.findOne({ where: { name: 'read' } })
+      const userReadPermission = await UserPermissions.findOne({ where: { user: req.user.id, permission: readPermission.id } })
+      const resource = await Resources.findOne({ where: { path: req.params.path } })
+      const resourcePermissions = await ResourcePermissions.findOne(({ where: { resource: resource.id, userPermission: userReadPermission.id } }))
+      if (!resourcePermissions) return res.status(401)
+      res.send(resource.body)
     })
   }
 

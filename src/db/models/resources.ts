@@ -25,7 +25,7 @@ class Resources extends Model<Resources> {
         return {
           id: uuid(),
           resource: instance.id,
-          permission: resourcePermission.id
+          userPermission: resourcePermission.id
         }
       })
     await ResourcePermissions.bulkCreate(resourcePermissions)
