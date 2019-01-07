@@ -1,7 +1,6 @@
 import App from './app'
 import { getExpress } from './express/express'
 import { getSequel } from './db'
-import config from '../sequelize_config.json'
 import request, { Response } from 'supertest'
 import { Express } from 'express'
 import Users from './db/models/users'
@@ -17,7 +16,7 @@ describe('App', async () => {
 
   beforeAll(async () => {
     express = getExpress()
-    app = new App(express, getSequel(config.development))
+    app = new App(express, getSequel(process.env.KEX_DB_URL))
     await app.setup()
     app.listen(port)
   })

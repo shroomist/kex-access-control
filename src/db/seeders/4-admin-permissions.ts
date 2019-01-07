@@ -3,14 +3,13 @@ import uuid from 'uuid/v4'
 import Permissions from '../models/permissions'
 import Users from '../models/users'
 import { getSequel } from '../index'
-import config from '../../../sequelize_config.json'
 
 let sqlz
 
 export default {
 
   up: async (queryInterface: QueryInterface) => {
-    sqlz = getSequel(config.development)
+    sqlz = getSequel(process.env.KEX_DB_URL)
     sqlz.addModels([Permissions, Users])
     const allPermissions = await Permissions.findAll({ attributes: ['id'] })
     const adminUser = await Users.findOne({ where: { name: 'admin' }, attributes: ['id'] })

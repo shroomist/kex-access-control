@@ -13,9 +13,9 @@ type DbConfig = {
   dialect: string
 }
 
-export const getSequel = (config: DbConfig) => {
+export const getSequel = (dbUrl: string) => {
   const sqlz = new Sequelize({
-    ...config,
+    url: dbUrl,
     logging: false,
     operatorsAliases: Sequelize.Op as any,
   })
