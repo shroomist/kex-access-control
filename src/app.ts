@@ -40,12 +40,10 @@ export default class App {
     this.express.get('/', (req, res) => res.send('Hello World!'))
     this.express.post('/users/:name', adminOnly, async (req, res) => {
       const found = await Users.findOne({ where: { name: req.params.name } })
-      console.log(found)
       if (found) return res.sendStatus(409)
       try {
         await Users.create({ id: uuid(), name: req.params.name })
       } catch (err) {
-        console.log(err)
         return res.sendStatus(500)
       }
       res.sendStatus(201)

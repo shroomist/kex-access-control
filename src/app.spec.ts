@@ -2,7 +2,7 @@ import App from './app'
 import { getExpress } from './express/express'
 import { getSequel } from './db'
 import config from '../sequelize_config.json'
-import request from 'supertest'
+import request, { Response } from 'supertest'
 import { Express } from 'express'
 import Users from './db/models/users'
 import UserPermissions from './db/models/userPermissions'
@@ -36,20 +36,44 @@ describe('App', async () => {
   })
 
   describe('/users/:name', () => {
-    it('allows admin to create new users', async () => {
-      const res = await request(express)
-        .post('/users/test')
-        .set('user', 'admin')
-      expect(res.status).toEqual(201)
-      const testUser = await Users.findOne(({ where: { name: 'test' } }))
-      expect(testUser.name).toEqual('test')
-      const testUserPermissions = await UserPermissions
-        .findAll({ where: { user: testUser.id } })
-      expect(testUserPermissions).toHaveLength(4)
-    })
-    afterAll(async () => {
-      const user = await Users.findOne({ where: { name: 'test' } })
-      await user.destroy()
+    describe('POST', () => {
+      const path = '/users/test'
+
+      describe('unauthorized', () => {
+        let res: Response
+
+        beforeAll(async () => {
+          res = await await request(express).post(path)
+        })
+
+        it('is not allowed', () => {
+          expect(res.status).toEqual(401)
+        })
+      })
+
+      describe('admin', () => {
+        let res: Response
+
+        beforeAll(async () => {
+          res = await request(express)
+            .post('/users/test')
+            .set('user', 'admin')
+        })
+
+        afterAll(async () => {
+          const user = await Users.findOne({ where: { name: 'test' } })
+          await user.destroy()
+        })
+
+        it('allows admin to create new users', async () => {
+          expect(res.status).toEqual(201)
+          const testUser = await Users.findOne(({ where: { name: 'test' } }))
+          expect(testUser.name).toEqual('test')
+          const testUserPermissions = await UserPermissions
+            .findAll({ where: { user: testUser.id } })
+          expect(testUserPermissions).toHaveLength(4)
+        })
+      })
     })
   })
 })

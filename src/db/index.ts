@@ -14,9 +14,8 @@ type DbConfig = {
 export const getSequel = (config: DbConfig) => {
   const sqlz = new Sequelize({
     ...config,
+    logging: false,
     operatorsAliases: Sequelize.Op as any,
-
-    // modelPaths: [path.join(__dirname, "../models")],
   })
 
   sqlz.addModels([Users, Permissions, UserPermissions])
