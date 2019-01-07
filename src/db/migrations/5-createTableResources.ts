@@ -15,6 +15,12 @@ export default {
 
     await db.createTable('Resources', {
       id: PRIMARY,
+      creator: {
+        ...KEY,
+        references: {
+          model: 'Users'
+        }
+      },
       path: STRING,
       body: STRING,
     })

@@ -1,4 +1,4 @@
-import { QueryInterface, STRING, UUID, fn } from 'sequelize'
+import { QueryInterface, UUID, fn } from 'sequelize'
 
 const KEY = {
   type: UUID,

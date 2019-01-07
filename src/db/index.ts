@@ -2,6 +2,8 @@ import { Sequelize } from 'sequelize-typescript'
 import Users from './models/users'
 import Permissions from './models/permissions'
 import UserPermissions from './models/userPermissions'
+import Resources from './models/resources'
+import ResourcePermissions from './models/resourcePermissions'
 
 type DbConfig = {
   host: string,
@@ -18,6 +20,12 @@ export const getSequel = (config: DbConfig) => {
     operatorsAliases: Sequelize.Op as any,
   })
 
-  sqlz.addModels([Users, Permissions, UserPermissions])
+  sqlz.addModels([
+    Users,
+    Permissions,
+    UserPermissions,
+    ResourcePermissions,
+    Resources
+  ])
   return sqlz
 }

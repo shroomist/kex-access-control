@@ -4,6 +4,8 @@ import { Server } from 'net'
 import { adminOnly, checkUserHeader } from './express/middleware'
 import Users from './db/models/users'
 import uuid = require('uuid/v4')
+import Resources from './db/models/resources'
+import { IKexRequest } from './express/express'
 
 export default class App {
   private server: Server
@@ -39,13 +41,25 @@ export default class App {
   private setupRoutes () {
     this.express.get('/', (req, res) => res.send('Hello World!'))
     this.express.post('/users/:name', adminOnly, async (req, res) => {
-      const found = await Users.findOne({ where: { name: req.params.name } })
-      if (found) return res.sendStatus(409)
+      const exists = await Users.findOne({ where: { name: req.params.name } })
+      if (exists) return res.sendStatus(409)
       try {
         await Users.create({ id: uuid(), name: req.params.name })
       } catch (err) {
         return res.sendStatus(500)
       }
+      res.sendStatus(201)
+    })
+
+    this.express.post('/resources/:path', async (req: IKexRequest, res) => {
+      const exists = await Resources.findOne({ where: { path: req.params.path } })
+      if (exists) return res.sendStatus(409)
+      await Resources.create({
+        id: uuid(),
+        creator: req.user.id,
+        path: req.params.path,
+        body: req.body.text
+      })
       res.sendStatus(201)
     })
   }

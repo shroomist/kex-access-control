@@ -20,9 +20,10 @@ export default {
         ...KEY,
         references: {
           model: 'Resources'
-        }
+        },
+        onDelete: 'cascade'
       },
-      user_permission: {
+      userPermission: {
         ...KEY,
         references: {
           model: 'UserPermissions'
