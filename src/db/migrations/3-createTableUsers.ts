@@ -22,9 +22,7 @@ export default {
         references: {
           model: 'Roles',
           key: 'id'
-        },
-        onUpdate: 'restrict',
-        onDelete: 'cascade'
+        }
       }
     })
     return null

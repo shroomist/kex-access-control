@@ -9,3 +9,8 @@ export const checkUserHeader = async (req: IKexRequest, res: Response, next: Nex
   req.user = user
   next()
 }
+
+export const adminOnly = async (req: IKexRequest, res: Response, next: NextFunction) => {
+  if (req.user.name !== 'admin') return res.sendStatus(401)
+  next()
+}

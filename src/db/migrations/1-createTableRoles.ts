@@ -22,7 +22,6 @@ export default {
   },
   down: async (db: QueryInterface): Promise<any> => {
     db.dropTable('Roles')
-    return null
   },
   _meta: { version: 1 }
 }

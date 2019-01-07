@@ -1,7 +1,9 @@
 import { Express } from 'express'
 import { Sequelize } from 'sequelize-typescript'
 import { Server } from 'net'
-import { checkUserHeader } from './express/middleware'
+import { adminOnly, checkUserHeader } from './express/middleware'
+import Users from './db/models/users'
+import uuid = require('uuid/v4')
 
 export default class App {
   private server: Server
@@ -36,9 +38,21 @@ export default class App {
 
   private setupRoutes () {
     this.express.get('/', (req, res) => res.send('Hello World!'))
+    this.express.post('/users/:name', adminOnly, async (req, res) => {
+      const found = await Users.findOne({ where: { name: req.params.name } })
+      console.log(found)
+      if (found) return res.sendStatus(409)
+      try {
+        await Users.create({ id: uuid(), name: req.params.name })
+      } catch (err) {
+        console.log(err)
+        return res.sendStatus(500)
+      }
+      res.sendStatus(201)
+    })
   }
 
   private setupAuthorizationMiddleware () {
-    this.express.use('*' , checkUserHeader)
+    this.express.use('*', checkUserHeader)
   }
 }
