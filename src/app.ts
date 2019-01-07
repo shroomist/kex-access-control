@@ -1,9 +1,11 @@
 import { Express } from 'express'
 import { Sequelize } from 'sequelize-typescript'
 import { Server } from 'net'
+import { checkUserHeader } from './express/middleware'
 
 export default class App {
   private server: Server
+
   constructor (private readonly express: Express,
                private readonly sequelize: Sequelize) {
   }
@@ -14,8 +16,9 @@ export default class App {
   }
 
   public async setup () {
-    this.setupRoutes()
     await this.setupSequelize()
+    this.setupAuthorizationMiddleware()
+    this.setupRoutes()
   }
 
   public close (cb?: (err: Error) => void) {
@@ -33,5 +36,9 @@ export default class App {
 
   private setupRoutes () {
     this.express.get('/', (req, res) => res.send('Hello World!'))
+  }
+
+  private setupAuthorizationMiddleware () {
+    this.express.use('*' , checkUserHeader)
   }
 }

@@ -1,7 +1,7 @@
 import App from './app'
 import { getSequel } from './db/index'
 import sequelConfig from '../sequelize_config.json'
-import { getExpress } from './express'
+import { getExpress } from './express/express'
 
 const PORT = 3000
 

@@ -1,5 +1,5 @@
 import App from './app'
-import { getExpress } from './express'
+import { getExpress } from './express/express'
 import { getSequel } from './db'
 import config from '../sequelize_config.json'
 import request from 'supertest'
@@ -22,8 +22,15 @@ describe('App', async () => {
     app.close()
   })
 
-  it('returns 200', async () => {
-    const res = await request(express).get('/')
-    expect(res.status).toEqual(200)
+  describe('middlewares', () => {
+    it('returns 401, if no user header exists', async () => {
+      const res = await request(express).get('/')
+      expect(res.status).toEqual(401)
+    })
+    it('returns 200, if user exists in headers and db', async () => {
+      const res = await request(express).get('/').set('user', 'admin')
+      expect(res.status).toEqual(200)
+    })
+
   })
 })
