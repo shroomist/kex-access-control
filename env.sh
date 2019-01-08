@@ -15,6 +15,8 @@ postfix=""
 
 if [[ ! -z "$1" ]]; then
     postfix="_$1"
+elif [[ "$1" = "ci" ]]; then
+    pass=""
 fi
 
 export KEX_DB_URL="postgres://$user:$pass@$host:$port/$dbname$postfix"
