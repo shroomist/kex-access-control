@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/shroomist/kex-access-control.svg?branch=master)](https://travis-ci.org/shroomist/kex-access-control)
+
 # Resource Access Control
 
 ## Installation
