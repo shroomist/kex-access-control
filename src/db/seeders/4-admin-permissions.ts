@@ -1,7 +1,7 @@
 import { QueryInterface } from 'sequelize'
 import uuid from 'uuid/v4'
-import Permissions from '../models/permissions'
-import Users from '../models/users'
+import Permission from '../models/permissions'
+import User from '../models/users'
 import { getSequel } from '../index'
 
 let sqlz
@@ -10,16 +10,16 @@ export default {
 
   up: async (queryInterface: QueryInterface) => {
     sqlz = getSequel(process.env.KEX_DB_URL)
-    sqlz.addModels([Permissions, Users])
-    const allPermissions = await Permissions.findAll({ attributes: ['id'] })
-    const adminUser = await Users.findOne({ where: { name: 'admin' }, attributes: ['id'] })
+    sqlz.addModels([Permission, User])
+    const allPermissions = await Permission.findAll({ attributes: ['id'] })
+    const adminUser = await User.findOne({ where: { name: 'admin' }, attributes: ['id'] })
     const adminPermissions = allPermissions.map((permission: { id: string }) => {
-      return { id: uuid(), user: adminUser.id, permission: permission.id }
+      return { id: uuid(), userId: adminUser.id, permissionId: permission.id }
     })
-    return queryInterface.bulkInsert('UserPermissions', adminPermissions)
+    return queryInterface.bulkInsert('UserPermission', adminPermissions)
   },
 
   down: (queryInterface: QueryInterface) => {
-    return queryInterface.bulkDelete('UserPermissions', null, {})
+    return queryInterface.bulkDelete('UserPermission', null, {})
   }
 }

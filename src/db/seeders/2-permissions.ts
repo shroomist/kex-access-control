@@ -4,7 +4,7 @@ import uuid from 'uuid/v4'
 export default {
 
   up: async (queryInterface: QueryInterface) => {
-    return queryInterface.bulkInsert('Permissions', [
+    return queryInterface.bulkInsert('Permission', [
       {
         id: uuid(),
         name: 'create',
@@ -25,6 +25,6 @@ export default {
   },
 
   down: (queryInterface: QueryInterface) => {
-    return queryInterface.bulkDelete('Permissions', null, {})
+    return queryInterface.bulkDelete('Permission', null, {})
   }
 }

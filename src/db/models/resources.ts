@@ -5,36 +5,37 @@ import {
   IsUUID,
   PrimaryKey,
   AfterCreate,
-  ForeignKey, AllowNull
+  ForeignKey, AllowNull, HasMany
 } from 'sequelize-typescript'
 
-import Users from './users'
-import UserPermissions from './userPermissions'
+import User from './users'
+import UserPermission from './userPermissions'
 import uuid = require('uuid/v4')
-import ResourcePermissions from './resourcePermissions'
+import ResourcePermission from './resourcePermissions'
 
 @Table
-class Resources extends Model<Resources> {
+class Resource extends Model<Resource> {
 
   @AfterCreate
-  public static async createPermissions (instance: Resources) {
-    const allUserPermissions = await UserPermissions
-      .findAll({ where: { user: instance.creator } })
+  public static async createPermissions (instance: Resource) {
+    const allUserPermissions = await UserPermission
+      .findAll({ where: { userId: instance.creatorId } })
     const resourcePermissions = allUserPermissions
       .map((resourcePermission) => {
         return {
           id: uuid(),
-          resource: instance.id,
-          userPermission: resourcePermission.id
+          resourceId: instance.id,
+          userPermissionId: resourcePermission.id
         }
       })
-    await ResourcePermissions.bulkCreate(resourcePermissions)
+    await ResourcePermission.bulkCreate(resourcePermissions)
   }
 
   @IsUUID(4) @PrimaryKey @Column public id: string
-  @ForeignKey(() => Users) @AllowNull(false) @Column public creator: string
+  @ForeignKey(() => User) @AllowNull(false) @Column public creatorId: string
   @Column public path: string
   @Column public body: string
+  @HasMany(() => ResourcePermission, 'resourceId') public resourcePermissions: ResourcePermission[]
 }
 
-export default Resources
+export default Resource

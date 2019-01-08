@@ -3,10 +3,10 @@ import { getExpress } from './express/express'
 import { getSequel } from './db'
 import request, { Response } from 'supertest'
 import { Express } from 'express'
-import Users from './db/models/users'
-import UserPermissions from './db/models/userPermissions'
-import Resources from './db/models/resources'
-import ResourcePermissions from './db/models/resourcePermissions'
+import User from './db/models/users'
+import UserPermission from './db/models/userPermissions'
+import Resource from './db/models/resources'
+import ResourcePermission from './db/models/resourcePermissions'
 
 const port = 3001
 
@@ -62,7 +62,7 @@ describe('App', async () => {
         })
 
         afterAll(async () => {
-          const user = await Users.findOne({ where: { name: 'test' } })
+          const user = await User.findOne({ where: { name: 'test' } })
           await user.destroy()
         })
 
@@ -71,10 +71,10 @@ describe('App', async () => {
         })
 
         it('creates a new user', async () => {
-          const testUser = await Users.findOne(({ where: { name: 'test' } }))
+          const testUser = await User.findOne(({ where: { name: 'test' } }))
           expect(testUser.name).toEqual('test')
-          const testUserPermissions = await UserPermissions
-            .findAll({ where: { user: testUser.id } })
+          const testUserPermissions = await UserPermission
+            .findAll({ where: { userId: testUser.id } })
           expect(testUserPermissions).toHaveLength(4)
         })
       })
@@ -95,7 +95,7 @@ describe('App', async () => {
         })
 
         afterAll(async () => {
-          const resource = await Resources.findOne({ where: { path: 'test' } })
+          const resource = await Resource.findOne({ where: { path: 'test' } })
           await resource.destroy()
         })
 
@@ -104,16 +104,13 @@ describe('App', async () => {
         })
 
         it('creates a new resource in db, and permissions for the user', async () => {
-          const resource = await Resources.findOne({ where: { path: 'test' } })
+          const resource = await Resource.findOne({ where: { path: 'test' } })
           expect(resource.body).toEqual('some text')
 
-          const resourcePermissions = await ResourcePermissions
-            .findAll({ where: { resource: resource.id } })
+          const resourcePermissions = await ResourcePermission
+            .findAll({ where: { resourceId: resource.id } })
           expect(resourcePermissions).toHaveLength(4)
         })
-
-        // it('creates permissions on that resource for this user', async() => {
-        // })
       })
     })
   })

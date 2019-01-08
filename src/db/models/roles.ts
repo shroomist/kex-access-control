@@ -7,9 +7,9 @@ const enum RolesEnum {
 }
 
 @Table
-class Roles extends Model<Roles> {
+class Role extends Model<Role> {
   @IsUUID(4) @PrimaryKey @Column public id: string
   @Column(DataType.STRING) public name: RolesEnum
 }
 
-export default Roles
+export default Role

@@ -2,13 +2,13 @@ import { Express } from 'express'
 import { Sequelize } from 'sequelize-typescript'
 import { Server } from 'net'
 import { adminOnly, checkUserHeader } from './express/middleware'
-import Users from './db/models/users'
+import User from './db/models/users'
 import uuid = require('uuid/v4')
-import Resources from './db/models/resources'
+import Resource from './db/models/resources'
 import { IKexRequest } from './express/express'
-import ResourcePermissions from './db/models/resourcePermissions'
-import UserPermissions from './db/models/userPermissions'
-import Permissions from './db/models/permissions'
+import ResourcePermission from './db/models/resourcePermissions'
+import UserPermission from './db/models/userPermissions'
+import Permission from './db/models/permissions'
 
 export default class App {
   private server: Server
@@ -44,10 +44,10 @@ export default class App {
   private setupRoutes () {
     this.express.get('/', (req, res) => res.send('Hello World!'))
     this.express.post('/users/:name', adminOnly, async (req, res) => {
-      const exists = await Users.findOne({ where: { name: req.params.name } })
+      const exists = await User.findOne({ where: { name: req.params.name } })
       if (exists) return res.sendStatus(409)
       try {
-        await Users.create({ id: uuid(), name: req.params.name })
+        await User.create({ id: uuid(), name: req.params.name })
       } catch (err) {
         return res.sendStatus(500)
       }
@@ -55,11 +55,11 @@ export default class App {
     })
 
     this.express.post('/resources/:path', async (req: IKexRequest, res) => {
-      const exists = await Resources.findOne({ where: { path: req.params.path } })
+      const exists = await Resource.findOne({ where: { path: req.params.path } })
       if (exists) return res.sendStatus(409)
-      await Resources.create({
+      await Resource.create({
         id: uuid(),
-        creator: req.user.id,
+        creatorId: req.user.id,
         path: req.params.path,
         body: req.body.text
       })
@@ -67,11 +67,26 @@ export default class App {
     })
 
     this.express.get('/resources/:path', async (req: IKexRequest, res) => {
-      const readPermission = await Permissions.findOne({ where: { name: 'read' } })
-      const userReadPermission = await UserPermissions.findOne({ where: { user: req.user.id, permission: readPermission.id } })
-      const resource = await Resources.findOne({ where: { path: req.params.path } })
-      const resourcePermissions = await ResourcePermissions.findOne(({ where: { resource: resource.id, userPermission: userReadPermission.id } }))
-      if (!resourcePermissions) return res.status(401)
+      const resource = await Resource
+        .findOne({
+          where: { path: req.params.path },
+          include: [{
+            model: ResourcePermission,
+            include: [{
+              model: UserPermission,
+              where: { userId: req.user.id },
+              include: [{
+                model: Permission
+              }]
+            }]
+          }]
+        })
+
+      if (!resource) return res.sendStatus(404)
+      const readPermission = resource.resourcePermissions.find((rp: ResourcePermission) =>
+        rp.userPermission.permission.name === 'read'
+      )
+      if (!readPermission) return res.sendStatus(401)
       res.send(resource.body)
     })
   }

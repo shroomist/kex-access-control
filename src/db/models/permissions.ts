@@ -8,9 +8,9 @@ const enum PermissionsEnum {
 }
 
 @Table
-class Permissions extends Model<Permissions> {
+class Permission extends Model<Permission> {
   @IsUUID(4) @PrimaryKey @Column public id: string
   @Column(DataType.STRING) public name: PermissionsEnum
 }
 
-export default Permissions
+export default Permission

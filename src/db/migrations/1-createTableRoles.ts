@@ -13,7 +13,7 @@ const PRIMARY = {
 
 export default {
   up: async (db: QueryInterface): Promise<any> => {
-    await db.createTable('Roles', {
+    await db.createTable('Role', {
       id: PRIMARY,
       name: STRING
     })
@@ -21,7 +21,7 @@ export default {
     return null
   },
   down: async (db: QueryInterface): Promise<any> => {
-    db.dropTable('Roles')
+    db.dropTable('Role')
   },
   _meta: { version: 1 }
 }

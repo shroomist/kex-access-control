@@ -14,13 +14,13 @@ const PRIMARY = {
 export default {
   up: async (db: QueryInterface): Promise<any> => {
 
-    await db.createTable('Users', {
+    await db.createTable('User', {
       id: PRIMARY,
       name: STRING,
-      role: {
+      roleId: {
         type: UUID,
         references: {
-          model: 'Roles',
+          model: 'Role',
           key: 'id'
         }
       }
@@ -28,7 +28,7 @@ export default {
     return null
   },
   down: async (db: QueryInterface): Promise<any> => {
-    return db.dropTable('Users')
+    return db.dropTable('User')
   },
   _meta: { version: 1 }
 }

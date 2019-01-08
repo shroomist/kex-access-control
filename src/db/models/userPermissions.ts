@@ -1,12 +1,24 @@
-import { Table, Column, Model, IsUUID, PrimaryKey, ForeignKey, AllowNull } from 'sequelize-typescript'
-import Users from './users'
-import Permissions from './permissions'
+import {
+  Table,
+  Column,
+  Model,
+  IsUUID,
+  PrimaryKey,
+  ForeignKey,
+  AllowNull,
+  BelongsTo,
+  HasMany
+} from 'sequelize-typescript'
+import User from './users'
+import Permission from './permissions'
+import ResourcePermission from './resourcePermissions'
 
 @Table
-class UserPermissions extends Model<UserPermissions> {
+class UserPermission extends Model<UserPermission> {
   @IsUUID(4) @PrimaryKey @Column public id: string
-  @ForeignKey(() => Users) @AllowNull(false) @Column public user: string
-  @ForeignKey(() => Permissions) @AllowNull(false) @Column public permission: string
+  @ForeignKey(() => User) @AllowNull(false) @Column public userId: string
+  @ForeignKey(() => Permission) @AllowNull(false) @Column public permissionId: string
+  @BelongsTo(() => Permission) public permission: Permission
 }
 
-export default UserPermissions
+export default UserPermission

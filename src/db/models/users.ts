@@ -6,28 +6,29 @@ import {
   DataType,
   IsUUID,
   PrimaryKey,
-  AfterCreate
+  AfterCreate, BelongsTo
 } from 'sequelize-typescript'
-import Roles from './roles'
-import UserPermissions from './userPermissions'
-import Permissions from './permissions'
+import Role from './roles'
+import UserPermission from './userPermissions'
+import Permission from './permissions'
 import uuid from 'uuid/v4'
 
 @Table
-class Users extends Model<Users> {
+class User extends Model<User> {
 
   @AfterCreate
-  public static async createPermissions (instance: Users) {
-    const allPermissions = await Permissions.findAll({ attributes: ['id'] })
+  public static async createPermissions (instance: User) {
+    const allPermissions = await Permission.findAll({ attributes: ['id'] })
 
-    const allThisUserPermissions = allPermissions.map((permission: { id: string }) => {
-      return { id: uuid(), user: instance.id, permission: permission.id }
+    const allThisUserPermissions = allPermissions.map((permission: Permission) => {
+      return { id: uuid(), userId: instance.id, permissionId: permission.id }
     })
-    UserPermissions.bulkCreate(allThisUserPermissions)
+    UserPermission.bulkCreate(allThisUserPermissions)
   }
   @IsUUID(4) @PrimaryKey @Column public id: string
   @Column(DataType.STRING) public name: string
-  @ForeignKey(() => Roles) public role: string
+  @ForeignKey(() => Role) public roleId: string
+  @BelongsTo(() => Role) public role: Role
 }
 
-export default Users
+export default User

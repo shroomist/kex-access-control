@@ -14,19 +14,19 @@ const PRIMARY = {
 export default {
   up: async (db: QueryInterface): Promise<any> => {
 
-    await db.createTable('ResourcePermissions', {
+    await db.createTable('ResourcePermission', {
       id: PRIMARY,
-      resource: {
+      resourceId: {
         ...KEY,
         references: {
-          model: 'Resources'
+          model: 'Resource'
         },
         onDelete: 'cascade'
       },
-      userPermission: {
+      userPermissionId: {
         ...KEY,
         references: {
-          model: 'UserPermissions'
+          model: 'UserPermission'
         }
       }
     })
@@ -34,7 +34,7 @@ export default {
     return null
   },
   down: async (db: QueryInterface): Promise<any> => {
-    await db.dropTable('ResourcePermissions')
+    await db.dropTable('ResourcePermission')
     return null
   },
   _meta: { version: 1 }
