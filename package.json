@@ -8,7 +8,7 @@
     "build": "./node_modules/typescript/bin/tsc",
     "test": "jest --detectOpenHandles",
     "testwatch": "npm test -- --watch",
-    "lint": "./node_modules/tslint/bin/tslint './src/**/*.ts'",
+    "lint": "./node_modules/tslint/bin/tslint --project tsconfig.json './src/**/*.ts'",
     "watch-node": "nodemon dist/index.js",
     "watch-ts": "npm run build -- -w",
     "dev": "npm run watch-node & npm run watch-ts",
