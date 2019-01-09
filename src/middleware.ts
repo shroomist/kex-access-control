@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express'
-import User from '../db/models/users'
-import { IKexRequest } from './express'
-import Role from '../db/models/roles'
+import User from './db/models/users'
+import { IKexRequest } from './getExpress'
+import Role from './db/models/roles'
 
 export const checkUserHeader = async (req: IKexRequest, res: Response, next: NextFunction) => {
   if (!req.headers.user) return res.sendStatus(401)

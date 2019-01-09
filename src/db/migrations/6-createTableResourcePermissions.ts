@@ -27,7 +27,8 @@ export default {
         ...KEY,
         references: {
           model: 'UserPermission'
-        }
+        },
+        onDelete: 'cascade'
       }
     })
 

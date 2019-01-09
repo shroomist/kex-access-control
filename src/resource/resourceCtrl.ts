@@ -1,4 +1,4 @@
-import { IKexRequest } from '../express/express'
+import { IKexRequest } from '../getExpress'
 import Resource from '../db/models/resources'
 import uuid = require('uuid/v4')
 import { Response } from 'express'
@@ -42,4 +42,17 @@ const read = async (req: IKexRequest, res: Response) => {
   res.send(resource.body)
 }
 
-export { create, read }
+const destroy = async (req: IKexRequest, res: Response) => {
+  const resource = await Resource
+    .findOne({
+      where: { path: req.params.path },
+      include: [{
+        model: UserPermission,
+        where: { userId: req.user.id }
+      }]
+    })
+  console.log(resource)
+  res.sendStatus(204)
+}
+
+export { create, read, destroy }

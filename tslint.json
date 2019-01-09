@@ -16,7 +16,8 @@
     "trailing-comma": false,
     "object-literal-sort-keys": false,
     "interface-over-type-literal": false,
-    "align": false
+    "align": false,
+    "prefer-array-literal": [true, { "allow-type-parameters": true }]
   },
   "rulesDirectory": []
 }

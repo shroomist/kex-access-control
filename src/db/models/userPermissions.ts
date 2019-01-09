@@ -6,12 +6,10 @@ import {
   PrimaryKey,
   ForeignKey,
   AllowNull,
-  BelongsTo,
-  HasMany
+  BelongsTo
 } from 'sequelize-typescript'
 import User from './users'
 import Permission from './permissions'
-import ResourcePermission from './resourcePermissions'
 
 @Table
 class UserPermission extends Model<UserPermission> {
@@ -19,6 +17,7 @@ class UserPermission extends Model<UserPermission> {
   @ForeignKey(() => User) @AllowNull(false) @Column public userId: string
   @ForeignKey(() => Permission) @AllowNull(false) @Column public permissionId: string
   @BelongsTo(() => Permission) public permission: Permission
+  // TODO: maybe better @BelongsToMany(() => Resource, { through: () => ResourcePermission })
 }
 
 export default UserPermission

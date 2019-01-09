@@ -1,33 +1,15 @@
-import { Sequelize } from 'sequelize-typescript'
-import User from './models/users'
-import Permission from './models/permissions'
-import UserPermission from './models/userPermissions'
-import Resource from './models/resources'
-import ResourcePermission from './models/resourcePermissions'
-import Role from './models/roles'
+import { Model, Sequelize } from 'sequelize-typescript'
 
-type DbConfig = {
-  host: string,
-  username: string,
-  password: string,
-  database: string,
-  dialect: string
-}
-
-export const getSequel = (dbUrl: string) => {
+const initDB = (url: string, models: Array<typeof Model>) => {
   const sqlz = new Sequelize({
-    url: dbUrl,
+    url,
     logging: false,
-    operatorsAliases: Sequelize.Op as any,
+    // operatorsAliases: Sequelize.Op as any, // maybe we'll use operators someday
   })
 
-  sqlz.addModels([
-    Role,
-    User,
-    Permission,
-    UserPermission,
-    ResourcePermission,
-    Resource
-  ])
+  sqlz.authenticate()
+  sqlz.addModels(models)
   return sqlz
 }
+
+export { initDB }

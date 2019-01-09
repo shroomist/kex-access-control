@@ -6,7 +6,8 @@ import {
   DataType,
   IsUUID,
   PrimaryKey,
-  AfterCreate, BelongsTo
+  AfterCreate,
+  BelongsTo
 } from 'sequelize-typescript'
 import Role from './roles'
 import UserPermission from './userPermissions'
@@ -25,10 +26,14 @@ class User extends Model<User> {
     })
     UserPermission.bulkCreate(allThisUserPermissions)
   }
+
   @IsUUID(4) @PrimaryKey @Column public id: string
   @Column(DataType.STRING) public name: string
   @ForeignKey(() => Role) public roleId: string
   @BelongsTo(() => Role) public role: Role
+  // @BelongsToMany(() => UserPermission, { through: () => UserPermission })
+  // public userPermissions: UserPermission[]
+  // TODO: no need for this belongs?
 }
 
 export default User

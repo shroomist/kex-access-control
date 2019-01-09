@@ -1,14 +1,38 @@
-import App from './app'
-import { getSequel } from './db/index'
-import { getExpress } from './express/express'
+import express from 'express'
+import { initDB } from './db/index'
+import Role from './db/models/roles'
+import User from './db/models/users'
+import Permission from './db/models/permissions'
+import UserPermission from './db/models/userPermissions'
+import ResourcePermission from './db/models/resourcePermissions'
+import Resource from './db/models/resources'
+import router from './router'
 
 const PORT = 3000
 
-const app = new App(getExpress(), getSequel(process.env.KEX_DB_URL))
+const db = initDB(process.env.KEX_DB_URL, [
+  Role,
+  User,
+  Permission,
+  UserPermission,
+  ResourcePermission,
+  Resource
+])
 
-const start = async () => {
-  await app.setup()
-  app.listen(PORT)
-}
+const expressApp = express()
+router(expressApp)
+const server = expressApp.listen(PORT)
 
-start()
+process.on('SIGTERM', () => {
+  let exitCode = 0
+  server.close(() => {
+    db.close()
+      .catch(() => {
+        exitCode = 1
+      })
+      .finally(() => {
+        process.exit(exitCode)
+      })
+  })
+
+})

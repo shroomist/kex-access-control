@@ -5,7 +5,7 @@ import {
   IsUUID,
   PrimaryKey,
   AfterCreate,
-  ForeignKey, AllowNull, HasMany
+  ForeignKey, AllowNull, HasMany, BelongsToMany
 } from 'sequelize-typescript'
 
 import User from './users'
@@ -35,7 +35,10 @@ class Resource extends Model<Resource> {
   @ForeignKey(() => User) @AllowNull(false) @Column public creatorId: string
   @Column public path: string
   @Column public body: string
-  @HasMany(() => ResourcePermission, 'resourceId') public resourcePermissions: ResourcePermission[]
+  @HasMany(() => ResourcePermission, 'resourceId')
+  public resourcePermissions: ResourcePermission[]
+  @BelongsToMany(() => UserPermission, { through: () => ResourcePermission })
+  public userPermissions: UserPermission
 }
 
 export default Resource
