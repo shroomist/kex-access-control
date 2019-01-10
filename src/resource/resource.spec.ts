@@ -8,14 +8,21 @@ import UserPermission from '../db/models/userPermissions'
 import Permission from '../db/models/permissions'
 import express, { Express } from 'express'
 import { initDB } from '../db'
+import { Sequelize } from 'sequelize-typescript'
 
 describe('/resource', () => {
   let app: Express
+  let db: Sequelize
+
   beforeAll(() => {
     app = express().use(resourceRouter)
-    initDB(
+    db = initDB(
       process.env.KEX_DB_URL,
       [User, Role, Resource, Permission, UserPermission, ResourcePermission])
+  })
+
+  afterAll(async () => {
+    await db.close()
   })
 
   describe('/:new', () => {

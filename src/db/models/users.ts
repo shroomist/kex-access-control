@@ -7,7 +7,8 @@ import {
   IsUUID,
   PrimaryKey,
   AfterCreate,
-  BelongsTo
+  BelongsTo,
+  BeforeCreate
 } from 'sequelize-typescript'
 import Role from './roles'
 import UserPermission from './userPermissions'
@@ -25,6 +26,15 @@ class User extends Model<User> {
       return { id: uuid(), userId: instance.id, permissionId: permission.id }
     })
     UserPermission.bulkCreate(allThisUserPermissions)
+  }
+
+  @BeforeCreate
+  public static async addDefaultPermission (instance: User) {
+    if (instance.roleId) return
+    const userRole = await Role.findOne({
+      where: { name: 'user' }
+    })
+    instance.roleId = userRole.id
   }
 
   @IsUUID(4) @PrimaryKey @Column public id: string

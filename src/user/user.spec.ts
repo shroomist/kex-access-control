@@ -8,14 +8,20 @@ import Role from '../db/models/roles'
 import User from '../db/models/users'
 import Permission from '../db/models/permissions'
 import { userRouter } from './router'
+import { Sequelize } from 'sequelize-typescript'
 
 describe('/user', () => {
   let app: Express
+  let db: Sequelize
   beforeAll(() => {
     app = express().use(userRouter)
-    initDB(
+    db = initDB(
       process.env.KEX_DB_URL,
       [User, Role, Resource, Permission, UserPermission, ResourcePermission])
+  })
+
+  afterAll(async () => {
+    await db.close()
   })
 
   describe('/:name', () => {
@@ -36,15 +42,20 @@ describe('/user', () => {
 
       describe('admin', () => {
         let res: Response
+        let user: User
 
         beforeAll(async () => {
           res = await request(app)
             .post(path)
             .set('user', 'admin')
+
+          user = await User.findOne({
+            where: { name: 'test' },
+            include: [{ model: Role }]
+          })
         })
 
         afterAll(async () => {
-          const user = await User.findOne({ where: { name: 'test' } })
           await user.destroy()
         })
 
@@ -52,12 +63,19 @@ describe('/user', () => {
           expect(res.status).toEqual(201)
         })
 
-        it('creates a new user', async () => {
-          const testUser = await User.findOne(({ where: { name: 'test' } }))
-          expect(testUser.name).toEqual('test')
+        it('creates a new user', () => {
+          expect(user.name).toEqual('test')
+        })
+
+        it('adds defaut role "user" to user', () => {
+          expect(user.role.name).toEqual('user')
+        })
+
+        it('creates userPermissions', async () => {
           const testUserPermissions = await UserPermission
-            .findAll({ where: { userId: testUser.id } })
+            .findAll({ where: { userId: user.id } })
           expect(testUserPermissions).toHaveLength(4)
+
         })
       })
     })
