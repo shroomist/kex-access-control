@@ -35,12 +35,12 @@ describe('/user', () => {
           res = await request(app).post(path)
         })
 
-        it('is not allowed', () => {
+        it('responds with 401', () => {
           expect(res.status).toEqual(401)
         })
       })
 
-      describe('admin', () => {
+      describe('admin headers', () => {
         let res: Response
         let user: User
 

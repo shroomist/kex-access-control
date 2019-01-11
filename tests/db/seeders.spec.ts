@@ -8,7 +8,7 @@ import UserPermission from '../../src/db/models/userPermissions'
 import Resource from '../../src/db/models/resources'
 import ResourcePermission from '../../src/db/models/resourcePermissions'
 
-describe('seeders', () => {
+describe('DB seeders', () => {
   let sqlz: Sequelize
   beforeAll(async () => {
     sqlz = initDB(

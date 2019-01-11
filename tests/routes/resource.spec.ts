@@ -27,19 +27,43 @@ describe('/resource', () => {
 
   describe('/:new', () => {
     const path = '/test'
+
     describe('POST', () => {
-      describe('any user', () => {
+
+      describe('unauthorized', () => {
         let res: Response
+
+        beforeAll(async () => {
+          res = await request(app).post(path)
+        })
+
+        it('responds with 401', () => {
+          expect(res.status).toEqual(401)
+        })
+      })
+
+      describe('existing user in headers', () => {
+        let res: Response
+        let resource: Resource
 
         beforeAll(async () => {
           res = await request(app)
             .post(path)
             .send({ text: 'some text' })
-            .set('user', 'admin')
+            .set('user', 'moder')
+
+          resource = await Resource.findOne({
+            where: { path: 'test' },
+            include: [{
+              model: UserPermission,
+              include: [{
+                model: User
+              }]
+            }]
+          })
         })
 
         afterAll(async () => {
-          const resource = await Resource.findOne({ where: { path: 'test' } })
           await resource.destroy()
         })
 
@@ -47,13 +71,13 @@ describe('/resource', () => {
           expect(res.status).toEqual(201)
         })
 
-        it('creates a new resource in db, and permissions for the user', async () => {
-          const resource = await Resource.findOne({ where: { path: 'test' } })
+        it('creates a new resource with body text', async () => {
           expect(resource.body).toEqual('some text')
+        })
 
-          const resourcePermissions = await ResourcePermission
-            .findAll({ where: { resourceId: resource.id } })
-          expect(resourcePermissions).toHaveLength(4)
+        it('creates userPermissions for the creator', () => {
+          expect(resource.userPermissions).toHaveLength(4)
+          expect(resource.userPermissions[0].user.name).toEqual('moder')
         })
       })
     })
