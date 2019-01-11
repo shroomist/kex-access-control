@@ -1,12 +1,12 @@
-import { initDB } from './index'
-import Role from './models/roles'
+import { initDB } from '../../src/db'
 import { Sequelize } from 'sequelize-typescript'
 
-import User from './models/users'
-import Permission, { PermissionsEnum } from './models/permissions'
-import UserPermission from './models/userPermissions'
-import Resource from './models/resources'
-import ResourcePermission from './models/resourcePermissions'
+import User from '../../src/db/models/users'
+import Role from '../../src/db/models/roles'
+import Permission, { PermissionsEnum } from '../../src/db/models/permissions'
+import UserPermission from '../../src/db/models/userPermissions'
+import Resource from '../../src/db/models/resources'
+import ResourcePermission from '../../src/db/models/resourcePermissions'
 
 describe('seeders', () => {
   let sqlz: Sequelize

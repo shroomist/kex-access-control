@@ -1,4 +1,4 @@
-import { IKexRequest } from '../getExpress'
+import { IKexRequest } from '../middleware'
 import Resource from '../db/models/resources'
 import uuid = require('uuid/v4')
 import { Response } from 'express'

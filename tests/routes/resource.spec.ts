@@ -1,14 +1,14 @@
-import Resource from '../db/models/resources'
-import ResourcePermission from '../db/models/resourcePermissions'
-import { resourceRouter } from './resourceRouter'
-import User from '../db/models/users'
+import Resource from '../../src/db/models/resources'
+import ResourcePermission from '../../src/db/models/resourcePermissions'
+import User from '../../src/db/models/users'
 import request, { Response } from 'supertest'
-import Role from '../db/models/roles'
-import UserPermission from '../db/models/userPermissions'
-import Permission from '../db/models/permissions'
+import Role from '../../src/db/models/roles'
+import UserPermission from '../../src/db/models/userPermissions'
+import Permission from '../../src/db/models/permissions'
 import express, { Express } from 'express'
-import { initDB } from '../db'
+import { initDB } from '../../src/db/index'
 import { Sequelize } from 'sequelize-typescript'
+import { resourceRouter } from '../../src/routes/resource'
 
 describe('/resource', () => {
   let app: Express

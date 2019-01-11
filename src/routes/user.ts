@@ -1,6 +1,6 @@
 import { adminOnly, checkUserHeader } from '../middleware'
 import express from 'express'
-import { create } from './userCtrl'
+import { create } from '../ctrls/user'
 
 const userRouter = express.Router()
 

@@ -1,5 +1,5 @@
 import User from '../db/models/users'
-import { IKexRequest } from '../getExpress'
+import { IKexRequest } from '../middleware'
 import { Response } from 'express'
 import uuid = require('uuid/v4')
 

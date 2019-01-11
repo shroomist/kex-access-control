@@ -1,7 +1,7 @@
 import express from 'express'
-import { create, read, destroy } from './resourceCtrl'
 import { checkUserHeader } from '../middleware'
 import bodyParser from 'body-parser'
+import { create, read, destroy } from '../ctrls/resource'
 
 const resourceRouter = express.Router()
 

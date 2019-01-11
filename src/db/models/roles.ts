@@ -1,9 +1,9 @@
 import { Table, Column, Model, IsUUID, PrimaryKey, DataType } from 'sequelize-typescript'
 
 const enum RolesEnum {
- admin = 'admin',
- moderator = 'moderator',
- user = 'user'
+  admin = 'admin',
+  moderator = 'moderator',
+  user = 'user'
 }
 
 @Table
@@ -13,3 +13,4 @@ class Role extends Model<Role> {
 }
 
 export default Role
+export { RolesEnum }

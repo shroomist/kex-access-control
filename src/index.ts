@@ -1,12 +1,14 @@
 import express from 'express'
+
 import { initDB } from './db/index'
+import router from './routes'
+
 import Role from './db/models/roles'
 import User from './db/models/users'
 import Permission from './db/models/permissions'
 import UserPermission from './db/models/userPermissions'
 import ResourcePermission from './db/models/resourcePermissions'
 import Resource from './db/models/resources'
-import router from './router'
 
 const PORT = 3000
 

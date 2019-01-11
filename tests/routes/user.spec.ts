@@ -1,14 +1,14 @@
 import express, { Express } from 'express'
 import request, { Response } from 'supertest'
-import { initDB } from '../db'
-import Resource from '../db/models/resources'
-import ResourcePermission from '../db/models/resourcePermissions'
-import UserPermission from '../db/models/userPermissions'
-import Role from '../db/models/roles'
-import User from '../db/models/users'
-import Permission from '../db/models/permissions'
-import { userRouter } from './router'
+import { initDB } from '../../src/db/index'
+import Resource from '../../src/db/models/resources'
+import ResourcePermission from '../../src/db/models/resourcePermissions'
+import UserPermission from '../../src/db/models/userPermissions'
+import Role from '../../src/db/models/roles'
+import User from '../../src/db/models/users'
+import Permission from '../../src/db/models/permissions'
 import { Sequelize } from 'sequelize-typescript'
+import { userRouter } from '../../src/routes/user'
 
 describe('/user', () => {
   let app: Express
