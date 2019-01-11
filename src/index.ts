@@ -23,9 +23,11 @@ const db = initDB(process.env.KEX_DB_URL, [
 
 const expressApp = express()
 router(expressApp)
-const server = expressApp.listen(PORT)
+const server = expressApp.listen(PORT, () => {
+  console.log(`I serve you my resources at :${PORT}`)
+})
 
-process.on('SIGTERM', () => {
+const quit = () => {
   let exitCode = 0
   server.close(() => {
     db.close()
@@ -33,8 +35,12 @@ process.on('SIGTERM', () => {
         exitCode = 1
       })
       .finally(() => {
+        console.log(`\n${exitCode === 0 ? 'ok, ' : ''}bye`)
         process.exit(exitCode)
       })
   })
 
-})
+}
+
+process.on('SIGTERM', quit)
+process.on('SIGINT', quit)
