@@ -2,9 +2,8 @@ import { IKexRequest } from '../getExpress'
 import Resource from '../db/models/resources'
 import uuid = require('uuid/v4')
 import { Response } from 'express'
-import ResourcePermission from '../db/models/resourcePermissions'
 import UserPermission from '../db/models/userPermissions'
-import Permission from '../db/models/permissions'
+import Permission, { PermissionsEnum } from '../db/models/permissions'
 
 const create = async (req: IKexRequest, res: Response) => {
   const exists = await Resource.findOne({ where: { path: req.params.path } })
@@ -23,20 +22,17 @@ const read = async (req: IKexRequest, res: Response) => {
     .findOne({
       where: { path: req.params.path },
       include: [{
-        model: ResourcePermission,
+        model: UserPermission,
+        where: { userId: req.user.id },
         include: [{
-          model: UserPermission,
-          where: { userId: req.user.id },
-          include: [{
-            model: Permission
-          }]
+          model: Permission
         }]
       }]
     })
 
   if (!resource) return res.sendStatus(404)
-  const readPermission = resource.resourcePermissions.find((rp: ResourcePermission) =>
-    rp.userPermission.permission.name === 'read'
+  const readPermission = resource.userPermissions.find(userPerm =>
+    userPerm.permission.name === PermissionsEnum.read
   )
   if (!readPermission) return res.sendStatus(401)
   res.send(resource.body)
@@ -48,11 +44,19 @@ const destroy = async (req: IKexRequest, res: Response) => {
       where: { path: req.params.path },
       include: [{
         model: UserPermission,
+        include: [{
+          model: Permission
+        }],
         where: { userId: req.user.id }
       }]
     })
-  console.log(resource)
-  res.sendStatus(204)
+  const delPerm = resource.userPermissions.find(userPerm =>
+    userPerm.permission.name === PermissionsEnum.delete
+  )
+  if (!delPerm) return res.sendStatus(401)
+
+  await resource.destroy()
+  res.sendStatus(200)
 }
 
 export { create, read, destroy }

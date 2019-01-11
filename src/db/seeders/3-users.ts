@@ -3,29 +3,30 @@ import uuid from 'uuid/v4'
 import Role from '../models/roles'
 import { initDB } from '../index'
 import User from '../models/users'
+import Permission from '../models/permissions'
+import UserPermission from '../models/userPermissions'
 
 export default {
 
-  up: async (queryInterface: QueryInterface) => {
-    const sqlz = initDB(process.env.KEX_DB_URL, [Role])
+  up: async () => {
+    const sqlz = initDB(process.env.KEX_DB_URL, [User, Permission, UserPermission, Role])
     const adminRole = await Role.findOne({ where: { name: 'admin' } })
     const moderatorRole = await Role.findOne({ where: { name: 'moderator' } })
 
-    sqlz.close()
-
-    return queryInterface.bulkInsert('User', [
-      {
+    await Promise.all([
+      User.create({
         id: uuid(),
         name: 'admin',
         roleId: adminRole.id,
-      },
-      {
+      }),
+      User.create({
         id: uuid(),
         name: 'moder',
         roleId: moderatorRole.id,
-      }
-
+      })
     ])
+
+    sqlz.close()
   },
 
   down: (queryInterface: QueryInterface) => {

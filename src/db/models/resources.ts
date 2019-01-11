@@ -21,11 +21,11 @@ class Resource extends Model<Resource> {
     const allUserPermissions = await UserPermission
       .findAll({ where: { userId: instance.creatorId } })
     const resourcePermissions = allUserPermissions
-      .map((resourcePermission) => {
+      .map((userPermission: UserPermission) => {
         return {
           id: uuid(),
           resourceId: instance.id,
-          userPermissionId: resourcePermission.id
+          userPermissionId: userPermission.id
         }
       })
     await ResourcePermission.bulkCreate(resourcePermissions)
@@ -35,10 +35,8 @@ class Resource extends Model<Resource> {
   @ForeignKey(() => User) @AllowNull(false) @Column public creatorId: string
   @Column public path: string
   @Column public body: string
-  @HasMany(() => ResourcePermission, 'resourceId')
-  public resourcePermissions: ResourcePermission[]
   @BelongsToMany(() => UserPermission, { through: () => ResourcePermission })
-  public userPermissions: UserPermission
+  public userPermissions: UserPermission[]
 }
 
 export default Resource

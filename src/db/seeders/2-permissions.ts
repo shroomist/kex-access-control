@@ -1,5 +1,6 @@
 import { QueryInterface } from 'sequelize'
 import uuid from 'uuid/v4'
+import { PermissionsEnum } from '../models/permissions'
 
 export default {
 
@@ -7,19 +8,19 @@ export default {
     return queryInterface.bulkInsert('Permission', [
       {
         id: uuid(),
-        name: 'create',
+        name: PermissionsEnum.create,
       },
       {
         id: uuid(),
-        name: 'read',
+        name: PermissionsEnum.read,
       },
       {
         id: uuid(),
-        name: 'update',
+        name: PermissionsEnum.update,
       },
       {
         id: uuid(),
-        name: 'delete',
+        name: PermissionsEnum.delete,
       },
     ])
   },

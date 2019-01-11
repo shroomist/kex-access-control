@@ -8,11 +8,15 @@ import {
   PrimaryKey,
   AfterCreate,
   BelongsTo,
-  BeforeCreate
+  BeforeCreate,
+  BelongsToMany,
+  HasMany
 } from 'sequelize-typescript'
+
 import Role from './roles'
 import UserPermission from './userPermissions'
 import Permission from './permissions'
+
 import uuid from 'uuid/v4'
 
 @Table
@@ -41,9 +45,9 @@ class User extends Model<User> {
   @Column(DataType.STRING) public name: string
   @ForeignKey(() => Role) public roleId: string
   @BelongsTo(() => Role) public role: Role
-  // @BelongsToMany(() => UserPermission, { through: () => UserPermission })
-  // public userPermissions: UserPermission[]
-  // TODO: no need for this belongs?
+  @BelongsToMany(() => Permission, { through: () => UserPermission })
+  public permissions: Permission[]
+  @HasMany(() => UserPermission) public userPermissions: UserPermission[]
 }
 
 export default User
