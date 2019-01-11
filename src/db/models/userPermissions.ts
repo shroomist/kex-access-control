@@ -15,6 +15,7 @@ import Permission from './permissions'
 class UserPermission extends Model<UserPermission> {
   @IsUUID(4) @PrimaryKey @Column public id: string
   @ForeignKey(() => User) @AllowNull(false) @Column public userId: string
+  @BelongsTo(() => User) public user: User
   @ForeignKey(() => Permission) @AllowNull(false) @Column public permissionId: string
   @BelongsTo(() => Permission) public permission: Permission
   // TODO: maybe better @BelongsToMany(() => Resource, { through: () => ResourcePermission })
